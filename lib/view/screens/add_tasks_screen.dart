@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:to_do_task_app/blocs/bloc/tasks_bloc.dart';
 import 'package:to_do_task_app/blocs/bloc_exports.dart';
 import 'package:to_do_task_app/models/tasks.dart';
+import 'package:to_do_task_app/view/services/guid_gen.dart';
 
 class AddTaskScreen extends StatelessWidget {
   AddTaskScreen({
@@ -30,6 +31,9 @@ class AddTaskScreen extends StatelessWidget {
             decoration: InputDecoration(
                 label: Text("Title"), border: OutlineInputBorder()),
           ),
+          SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -40,7 +44,8 @@ class AddTaskScreen extends StatelessWidget {
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
-                    var task = Task(title: titleController.text);
+                    var task = Task(
+                        title: titleController.text, id: GUIDGen.generate());
                     context.read<TasksBloc>().add(AddTask(task: task));
                     Navigator.pop(context);
                   },

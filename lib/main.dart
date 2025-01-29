@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_task_app/view/screens/tasks_screen.dart';
 import 'blocs/bloc_exports.dart';
-import 'package:to_do_task_app/models/tasks.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('tasksBox');
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          TasksBloc()..add(AddTask(task: Task(title: "Task1"))),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TasksBloc>(
+          create: (context) => TasksBloc(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -23,7 +29,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: TasksScreen(),
+        home: const TasksScreen(),
       ),
     );
   }

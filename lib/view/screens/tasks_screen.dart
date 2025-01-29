@@ -5,8 +5,14 @@ import 'package:to_do_task_app/models/tasks.dart';
 import 'package:to_do_task_app/view/screens/add_tasks_screen.dart';
 import 'package:to_do_task_app/view/widgets/tasks_list.dart';
 
-class TasksScreen extends StatelessWidget {
-  TasksScreen({super.key});
+class TasksScreen extends StatefulWidget {
+  const TasksScreen({super.key});
+
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
   void _addTask(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -27,10 +33,10 @@ class TasksScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Tasks Screen"),
+            title: const Text("Tasks App"),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => _addTask(context),
                 icon: const Icon(Icons.add),
               ),
             ],
@@ -40,7 +46,16 @@ class TasksScreen extends StatelessWidget {
             children: [
               Center(
                 child: Chip(
-                  label: Text("Tasks (${tasksList.length})"),
+                  backgroundColor: Colors.grey[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  label: Text(
+                    "Tasks:",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
                 ),
               ),
               TasksList(tasksList: tasksList),
