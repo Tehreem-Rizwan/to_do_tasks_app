@@ -20,7 +20,7 @@ class AddTaskScreen extends StatelessWidget {
         children: [
           Text(
             'Add Task',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: 10,

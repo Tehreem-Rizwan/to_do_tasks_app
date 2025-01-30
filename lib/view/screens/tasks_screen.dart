@@ -33,7 +33,12 @@ class _TasksScreenState extends State<TasksScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Tasks App"),
+            backgroundColor: Colors.black,
+            title: const Text(
+              "Tasks App",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
             actions: [
               IconButton(
                 onPressed: () => _addTask(context),
@@ -62,9 +67,13 @@ class _TasksScreenState extends State<TasksScreen> {
             ],
           ),
           floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
             onPressed: () => _addTask(context),
             tooltip: 'Add Task',
-            child: const Icon(Icons.add),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
         );
       },
