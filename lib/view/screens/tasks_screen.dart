@@ -35,6 +35,7 @@ class _TasksScreenState extends State<TasksScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.white),
             backgroundColor: Colors.black,
             title: const Text(
               "Tasks App",
@@ -44,7 +45,10 @@ class _TasksScreenState extends State<TasksScreen> {
             actions: [
               IconButton(
                 onPressed: () => _addTask(context),
-                icon: const Icon(Icons.add),
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

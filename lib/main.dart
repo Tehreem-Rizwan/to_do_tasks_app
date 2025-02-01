@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_task_app/view/screens/tasks_screen.dart';
+import 'package:to_do_task_app/view/services/app_router.dart';
 import 'blocs/bloc_exports.dart';
 
 void main() async {
@@ -8,12 +9,14 @@ void main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('tasksBox');
-  runApp(const MyApp());
+  runApp(MyApp(
+    appRouter: AppRouter(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.appRouter});
+  final AppRouter appRouter;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const TasksScreen(),
+        onGenerateRoute: appRouter.onGenerateRoute,
       ),
     );
   }

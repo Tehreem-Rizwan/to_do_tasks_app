@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:to_do_task_app/blocs/bloc/tasks_bloc.dart';
+import 'package:to_do_task_app/blocs/tasks_bloc/tasks_bloc.dart';
 import 'package:to_do_task_app/blocs/bloc_exports.dart';
 import 'package:to_do_task_app/models/tasks.dart';
 import 'package:to_do_task_app/view/services/guid_gen.dart';
