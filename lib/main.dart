@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_task_app/view/screens/tasks_screen.dart';
+import 'package:to_do_task_app/view/screens/tabs_screen.dart';
 import 'package:to_do_task_app/view/services/app_router.dart';
+import 'package:to_do_task_app/view/services/app_theme.dart';
 import 'blocs/bloc_exports.dart';
 
 void main() async {
@@ -21,20 +22,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TasksBloc>(
+        BlocProvider(
           create: (context) => TasksBloc(),
         ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+        BlocProvider(
+          create: (context) => SwitchBloc(),
         ),
-        home: const TasksScreen(),
-        onGenerateRoute: appRouter.onGenerateRoute,
-      ),
+      ],
+      child: BlocBuilder<SwitchBloc, SwitchState>(builder: (context, state) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: state.switchValue
+              ? AppThemes.appThemeData[AppTheme.darkTheme]
+              : AppThemes.appThemeData[AppTheme.lightTheme],
+          home: TabsScreen(),
+          onGenerateRoute: appRouter.onGenerateRoute,
+        );
+      }),
     );
   }
 }
