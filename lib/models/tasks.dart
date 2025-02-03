@@ -2,11 +2,13 @@ import 'package:equatable/equatable.dart';
 
 class Task extends Equatable {
   final String title;
+  final String description;
   final String id;
   bool? isDone;
   bool? isDeleted;
   Task({
     required this.title,
+    required this.description,
     required this.id,
     this.isDone,
     this.isDeleted,
@@ -18,6 +20,7 @@ class Task extends Equatable {
     return Task(
         id: id ?? this.id,
         title: title ?? this.title,
+        description: title ?? this.description,
         isDone: isDone ?? this.isDone,
         isDeleted: isDeleted ?? this.isDeleted);
   }
@@ -26,6 +29,7 @@ class Task extends Equatable {
     return {
       'id': id,
       'title': title,
+      'description': description,
       'isDone': isDone,
       'isDeleted': isDeleted,
     };
@@ -35,11 +39,12 @@ class Task extends Equatable {
     return Task(
       id: map['id'],
       title: map['title'] ?? '',
+      description: map['description'] ?? '',
       isDone: map['isDOne'] ?? '',
       isDeleted: map['isDeleted'] ?? '',
     );
   }
 
   @override
-  List<Object?> get props => [id, title, isDone, isDeleted];
+  List<Object?> get props => [id, title, description, isDone, isDeleted];
 }
