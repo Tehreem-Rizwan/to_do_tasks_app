@@ -29,7 +29,9 @@ class TaskTile extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Icon(Icons.star_outline),
+                task.isFavorite == false
+                    ? Icon(Icons.star_outline)
+                    : Icon(Icons.star),
                 SizedBox(
                   width: 10,
                 ),
@@ -69,6 +71,9 @@ class TaskTile extends StatelessWidget {
                 cancelOrDeleteCallback: () =>
                     _removeorDeleteTask(context, task),
                 task: task,
+                likeOrDislike: () => context
+                    .read<TasksBloc>()
+                    .add(MarkFavoriteOrUnFavoriteTask(task: task)),
               )
             ],
           ),

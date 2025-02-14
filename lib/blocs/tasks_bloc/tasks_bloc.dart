@@ -14,6 +14,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<UpdateTask>(_onUpdateTask);
     on<DeleteTask>(_onDeleteTask);
     on<RemoveTask>(_onRemoveTask);
+    on<MarkFavoriteOrUnFavoriteTask>(_onMarkFavoriteOrUnFavoriteTask);
   }
 
   Future<void> _loadTasks() async {
@@ -92,6 +93,48 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     ));
 
     _saveTasks(state);
+  }
+
+  void _onMarkFavoriteOrUnFavoriteTask(
+      MarkFavoriteOrUnFavoriteTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    List<Task> pendingTasks = state.pendingTasks;
+    List<Task> completedTasks = state.completedTasks;
+    List<Task> favroiteTasks = state.favoriteTasks;
+    if (event.task.isDone == false) {
+      if (event.task.isFavorite == false) {
+        var taskIndex = pendingTasks.indexOf(event.task);
+        pendingTasks = List.from(pendingTasks)
+          ..remove(event.task)
+          ..insert(taskIndex, event.task.copyWith(isFavorite: true));
+        favroiteTasks.insert(0, event.task.copyWith(isFavorite: true));
+      } else {
+        var taskIndex = pendingTasks.indexOf(event.task);
+        pendingTasks = List.from(pendingTasks)
+          ..remove(event.task)
+          ..insert(taskIndex, event.task.copyWith(isFavorite: false));
+        favroiteTasks.remove(event.task);
+      }
+    } else {
+      if (event.task.isFavorite == false) {
+        var taskIndex = completedTasks.indexOf(event.task);
+        completedTasks = List.from(completedTasks)
+          ..remove(event.task)
+          ..insert(taskIndex, event.task.copyWith(isFavorite: true));
+        favroiteTasks.insert(0, event.task.copyWith(isFavorite: true));
+      } else {
+        var taskIndex = completedTasks.indexOf(event.task);
+        completedTasks = List.from(pendingTasks)
+          ..remove(event.task)
+          ..insert(taskIndex, event.task.copyWith(isFavorite: false));
+        favroiteTasks.remove(event.task);
+      }
+    }
+    emit(TasksState(
+        pendingTasks: pendingTasks,
+        completedTasks: completedTasks,
+        favoriteTasks: favroiteTasks,
+        removedTasks: state.removedTasks));
   }
 
   void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) {
