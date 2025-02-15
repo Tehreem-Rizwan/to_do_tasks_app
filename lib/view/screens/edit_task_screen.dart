@@ -6,14 +6,19 @@ import 'package:to_do_task_app/models/tasks.dart';
 import 'package:to_do_task_app/view/services/guid_gen.dart';
 
 class EditTaskScreen extends StatelessWidget {
+  final Task oldTask;
+
   EditTaskScreen({
     super.key,
+    required this.oldTask,
   });
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController();
-    TextEditingController desciptionController = TextEditingController();
+    TextEditingController titleController =
+        TextEditingController(text: oldTask.title);
+    TextEditingController desciptionController =
+        TextEditingController(text: oldTask.description);
 
     return Container(
       padding: EdgeInsets.all(20),
@@ -56,17 +61,21 @@ class EditTaskScreen extends StatelessWidget {
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
-                    var task = Task(
+                    var editedTask = Task(
                         title: titleController.text,
                         description: desciptionController.text,
                         date: DateTime.now().toString(),
-                        id: GUIDGen.generate());
+                        id: oldTask.id,
+                        isDone: false,
+                        isFavorite: oldTask.isFavorite);
 
-                    context.read<TasksBloc>().add(AddTask(task: task));
+                    context
+                        .read<TasksBloc>()
+                        .add(EditTask(oldTask: oldTask, newTask: editedTask));
                     Navigator.pop(context);
                   },
                   child: Text(
-                    "Edit",
+                    "Save",
                     style: TextStyle(color: Colors.white),
                   ))
             ],

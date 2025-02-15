@@ -4,13 +4,17 @@ import 'package:to_do_task_app/models/tasks.dart';
 class PopupMenu extends StatelessWidget {
   final Task task;
   final VoidCallback cancelOrDeleteCallback;
-  final VoidCallback likeOrDislike;
+  final VoidCallback likeOrDislikeCallback;
+  final VoidCallback editTaskCallback;
+  final VoidCallback restoreTaskCallback;
 
   const PopupMenu({
     Key? key,
     required this.cancelOrDeleteCallback,
-    required this.likeOrDislike,
+    required this.likeOrDislikeCallback,
     required this.task,
+    required this.editTaskCallback,
+    required this.restoreTaskCallback,
   }) : super(key: key);
 
   @override
@@ -20,10 +24,10 @@ class PopupMenu extends StatelessWidget {
             ? ((context) => [
                   PopupMenuItem(
                     child: TextButton.icon(
-                        onPressed: null,
+                        onPressed: editTaskCallback,
                         icon: Icon(Icons.edit),
                         label: Text("Edit")),
-                    onTap: () {},
+                    onTap: null,
                   ),
                   PopupMenuItem(
                     child: TextButton.icon(
@@ -32,10 +36,10 @@ class PopupMenu extends StatelessWidget {
                           ? Icon(Icons.bookmark_add_outlined)
                           : Icon(Icons.bookmark_remove),
                       label: task.isFavorite == false
-                          ? Text("Add to Bookmarks")
-                          : Text("Remove from Bookmarks"),
+                          ? Text("Add to\nBookmarks")
+                          : Text("Remove from \nBookmarks"),
                     ),
-                    onTap: likeOrDislike,
+                    onTap: likeOrDislikeCallback,
                   ),
                   PopupMenuItem(
                     child: TextButton.icon(
@@ -51,7 +55,7 @@ class PopupMenu extends StatelessWidget {
                         onPressed: null,
                         icon: Icon(Icons.restore_from_trash),
                         label: Text("Restore")),
-                    onTap: cancelOrDeleteCallback,
+                    onTap: restoreTaskCallback,
                   ),
                   PopupMenuItem(
                     child: TextButton.icon(

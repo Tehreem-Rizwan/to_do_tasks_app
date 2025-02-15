@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:to_do_task_app/blocs/bloc_exports.dart';
 import 'package:to_do_task_app/models/tasks.dart';
 import 'package:to_do_task_app/blocs/tasks_bloc/tasks_bloc.dart';
+import 'package:to_do_task_app/view/screens/edit_task_screen.dart';
 import 'package:to_do_task_app/view/widgets/pop_up_menu.dart';
 
 class TaskTile extends StatelessWidget {
@@ -17,6 +18,21 @@ class TaskTile extends StatelessWidget {
     task.isDeleted!
         ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
         : ctx.read<TasksBloc>().add(RemoveTask(task: task));
+  }
+
+  void _editTask(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: EditTaskScreen(
+                  oldTask: task,
+                ),
+              ),
+            ));
   }
 
   @override
@@ -68,13 +84,18 @@ class TaskTile extends StatelessWidget {
                         }
                       : null),
               PopupMenu(
-                cancelOrDeleteCallback: () =>
-                    _removeorDeleteTask(context, task),
-                task: task,
-                likeOrDislike: () => context
-                    .read<TasksBloc>()
-                    .add(MarkFavoriteOrUnFavoriteTask(task: task)),
-              )
+                  cancelOrDeleteCallback: () =>
+                      _removeorDeleteTask(context, task),
+                  task: task,
+                  likeOrDislikeCallback: () => context
+                      .read<TasksBloc>()
+                      .add(MarkFavoriteOrUnFavoriteTask(task: task)),
+                  editTaskCallback: () {
+                    Navigator.of(context).pop();
+                    _editTask(context);
+                  },
+                  restoreTaskCallback: () =>
+                      context.read<TasksBloc>().add(RestoreTask(task: task)))
             ],
           ),
         ],

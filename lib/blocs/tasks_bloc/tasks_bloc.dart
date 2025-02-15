@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_task_app/models/tasks.dart';
 part 'tasks_event.dart';
@@ -15,6 +16,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<DeleteTask>(_onDeleteTask);
     on<RemoveTask>(_onRemoveTask);
     on<MarkFavoriteOrUnFavoriteTask>(_onMarkFavoriteOrUnFavoriteTask);
+    on<EditTask>(_onEditTask);
+    on<RestoreTask>(_onRestoreTask);
   }
 
   Future<void> _loadTasks() async {
@@ -137,6 +140,25 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         removedTasks: state.removedTasks));
   }
 
+  void _onEditTask(EditTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+
+    List<Task> favoriteTasks = state.favoriteTasks;
+    if (event.oldTask.isFavorite == true) {
+      favoriteTasks
+        ..remove(event.oldTask)
+        ..insert(0, event.newTask);
+    }
+    emit(TasksState(
+      pendingTasks: List.from(state.pendingTasks)
+        ..remove(event.oldTask)
+        ..insert(0, event.newTask),
+      completedTasks: state.completedTasks..remove(event.oldTask),
+      favoriteTasks: favoriteTasks,
+      removedTasks: state.removedTasks,
+    ));
+  }
+
   void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) {
     final List<Task> newPendingTasks = List<Task>.from(state.pendingTasks)
       ..remove(event.task);
@@ -148,6 +170,23 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       completedTasks: state.completedTasks,
       favoriteTasks: state.favoriteTasks,
       removedTasks: newRemovedTasks,
+    ));
+
+    _saveTasks(state);
+  }
+
+  void _onRestoreTask(RemoveTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+
+    emit(TasksState(
+      removedTasks: List.from(state.removedTasks)..remove(event.task),
+      pendingTasks: List.from(state.pendingTasks)
+        ..insert(
+            0,
+            event.task
+                .copyWith(isDeleted: false, isDone: false, isFavorite: false)),
+      completedTasks: state.completedTasks,
+      favoriteTasks: state.favoriteTasks,
     ));
 
     _saveTasks(state);
