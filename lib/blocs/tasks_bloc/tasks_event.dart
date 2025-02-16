@@ -49,3 +49,5 @@ class RestoreTask extends TasksEvent {
   RestoreTask({required this.task});
   List<Object> get props => [task];
 }
+
+class DeleteAllTasks extends TasksEvent {}

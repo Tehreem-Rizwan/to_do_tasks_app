@@ -18,10 +18,16 @@ class RecycleBin extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.add),
-            ),
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: TextButton.icon(
+                              onPressed: null,
+                              icon: Icon(Icons.delete_forever),
+                              label: Text("Delete all Tasks")),
+                          onTap: () =>
+                              context.read<TasksBloc>().add(DeleteAllTasks()))
+                    ])
           ],
         ),
         drawer: MyDrawer(),
