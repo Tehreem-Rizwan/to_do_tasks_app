@@ -20,7 +20,7 @@ class PopupMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-        itemBuilder: task.isDeleted == false
+        itemBuilder: task.isDeleted == false //false
             ? ((context) => [
                   PopupMenuItem(
                     child: TextButton.icon(
